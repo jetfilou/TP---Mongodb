@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un compte</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>Créer un compte</header>
+
+  <div class="container">
+    <form action="/signup" method="POST" enctype="multipart/form-data">
+      <input type="text" name="firstname" placeholder="Prénom" required>
+      <input type="text" name="lastname" placeholder="Nom" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Mot de passe" required>
+      <label for="avatar">Avatar :</label>
+      <input type="file" name="avatar" accept="image/*">
+      <button type="submit">Créer mon compte</button>
+    </form>
+    <p>Déjà un compte ? <a href="/login">Se connecter</a></p>
+  </div>
+</body>
+</html>

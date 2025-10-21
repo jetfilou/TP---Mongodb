@@ -14,13 +14,12 @@ const Post = require('./models/postModel');
 const userController = require('./controllers/userController');
 const postController = require('./controllers/postController');
 const answerController = require('./controllers/answerController');
+const userRoutes = require('./routes/userRoutes'); // ✅ nouvelle route regroupée
 
 global.currentUserId = null;
 
-// Routes login/logout
-app.get('/login', userController.getLoginPage);
-app.post('/login', userController.loginUser);
-app.get('/logout', userController.logoutUser);
+// ✅ Toutes les routes utilisateur : /login /signup /logout
+app.use('/', userRoutes);
 
 // Page principale
 app.get('/index', async (req, res) => {
@@ -31,7 +30,6 @@ app.get('/index', async (req, res) => {
 
   let html = fs.readFileSync(path.join(__dirname, 'views/index.html'), 'utf-8');
 
-  // Génération dynamique des posts
   let postsHtml = '';
   posts.forEach(p => {
     postsHtml += `<div class="post">
@@ -63,18 +61,13 @@ app.get('/index', async (req, res) => {
   res.send(html);
 });
 
-// Création messages et réponses
 app.post('/createMessage', postController.createMessage);
 app.post('/createAnswer', answerController.createAnswer);
-
-// API JSON
 app.get('/api/messages', postController.apiMessages);
 
-// Connexion Mongo
 mongoose.connect('mongodb://127.0.0.1:27017/TP1-MongoSharding')
   .then(() => console.log('✅ Connecté à MongoDB'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// Lancement serveur
 const PORT = 3000;
 app.listen(PORT, () => console.log(`🚀 Serveur en ligne sur http://localhost:${PORT}`));

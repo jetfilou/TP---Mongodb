@@ -1,10 +1,25 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   user_id: Number,
-  firstname: String,
-  lastname: String,
-  email: String
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  avatar: { type: String, default: '/img/default.png' }
+});
+
+// Hachage du mot de passe avant sauvegarde
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = mongoose.model('Users', userSchema);
