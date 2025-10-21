@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
-const answerSchema = require('./answerModel');
+
+const answerSchema = new mongoose.Schema({
+  message: String,
+  author: String,
+  creationDate: { type: Date, default: Date.now }
+});
 
 const postSchema = new mongoose.Schema({
   post_id: Number,
@@ -9,4 +14,4 @@ const postSchema = new mongoose.Schema({
   creationDate: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Posts', postSchema);

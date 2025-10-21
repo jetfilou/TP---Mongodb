@@ -1,77 +1,26 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Accueil - Mon Twitter Clone</title>
-    <link rel="stylesheet" href="/css/index.css">
-  </head>
-  <body>
-    <header>Mon Twitter Clone</header>
-    <div class="container">
-      <div class="logout"><a href="/logout">Se déconnecter</a></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Accueil</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>Mon Twitter Clone</header>
+<div class="container">
+  <div class="logout"><a href="/logout">Se déconnecter</a></div>
+  <h2>Bienvenue, {{firstname}} {{lastname}}</h2>
 
-      <h2 id="welcome">Bienvenue</h2>
-
-      <!-- Nouveau message -->
-      <div class="post">
-        <form method="POST" action="/createMessage" id="createMessageForm">
-          <input type="hidden" name="authorId" id="authorId" value="">
-          <textarea name="message" placeholder="Quoi de neuf ?" rows="3" required></textarea>
-          <button type="submit">Publier</button>
-        </form>
-      </div>
-
-      <hr>
-
-      <div id="postsContainer"></div>
-
-      <p><a href="/index">↻ Recharger</a></p>
-    </div>
-
-    <script>
-      // Charge les messages depuis l'API
-      async function loadMessages() {
-        const res = await fetch('/api/messages');
-        if (!res.ok) { document.getElementById('postsContainer').innerText = 'Erreur chargement messages'; return; }
-        const data = await res.json();
-        const container = document.getElementById('postsContainer');
-        container.innerHTML = '';
-
-        data.forEach(p => {
-          const post = document.createElement('div');
-          post.className = 'post';
-          post.innerHTML = `
-            <p class="author">${p.author}</p>
-            <p>${p.message}</p>
-            <p class="date">${new Date(p.creationDate).toLocaleString()}</p>
-          `;
-
-          if (p.answers && p.answers.length>0) {
-            p.answers.slice(0,100).forEach(a=>{
-              const ans = document.createElement('div');
-              ans.className = 'answer';
-              ans.innerHTML = `<p class="author">${a.author}</p><p>${a.message}</p><p class="date">${new Date(a.creationDate).toLocaleString()}</p>`;
-              post.appendChild(ans);
-            });
-          }
-
-          // Formulaire de réponse (simple)
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = '/createAnswer';
-          form.innerHTML = `
-            <input type="hidden" name="messageId" value="${p.post_id}">
-            <input type="hidden" name="authorId" value=""> <!-- mettre l'id via serveur si besoin -->
-            <textarea name="answer" placeholder="Répondre..." rows="2" required></textarea>
-            <button type="submit">Répondre</button>
-          `;
-          post.appendChild(form);
-
-          container.appendChild(post);
-        });
-      }
-
-      loadMessages();
-    </script>
-  </body>
+  <!-- Nouveau message -->
+  <div class="post">
+    <form method="POST" action="/createMessage">
+      <input type="hidden" name="authorId" value="{{user_id}}">
+      <textarea name="message" placeholder="Quoi de neuf ?" rows="3" required></textarea>
+      <button type="submit">Publier</button>
+    </form>
+  </div>
+  <hr>
+  {{posts}}
+</div>
+</body>
 </html>

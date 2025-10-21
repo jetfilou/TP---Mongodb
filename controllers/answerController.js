@@ -1,5 +1,5 @@
-const Post = require('../models/postModel');
 const User = require('../models/userModel');
+const Post = require('../models/postModel');
 
 exports.createAnswer = async (req, res) => {
   const { authorId, messageId, answer } = req.body;
@@ -10,11 +10,7 @@ exports.createAnswer = async (req, res) => {
   if (!post) return res.send('Message introuvable');
   if (post.answers.length >= 100) return res.send('Nombre maximum de réponses atteint');
 
-  post.answers.push({
-    message: answer,
-    author: `${user.firstname} ${user.lastname}`
-  });
-
+  post.answers.push({ message: answer, author: `${user.firstname} ${user.lastname}` });
   await post.save();
   res.redirect('/index');
 };
