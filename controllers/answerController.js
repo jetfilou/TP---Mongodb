@@ -1,0 +1,20 @@
+const Post = require('../models/postModel');
+const User = require('../models/userModel');
+
+exports.createAnswer = async (req, res) => {
+  const { authorId, messageId, answer } = req.body;
+  const user = await User.findOne({ user_id: authorId });
+  if (!user) return res.send('Auteur introuvable');
+
+  const post = await Post.findOne({ post_id: messageId });
+  if (!post) return res.send('Message introuvable');
+  if (post.answers.length >= 100) return res.send('Nombre maximum de réponses atteint');
+
+  post.answers.push({
+    message: answer,
+    author: `${user.firstname} ${user.lastname}`
+  });
+
+  await post.save();
+  res.redirect('/index');
+};
