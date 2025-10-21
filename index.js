@@ -18,7 +18,7 @@ const userRoutes = require('./routes/userRoutes'); // ✅ nouvelle route regroup
 
 global.currentUserId = null;
 
-// ✅ Toutes les routes utilisateur : /login /signup /logout
+// ✅ Toutes les routes utilisateur : /signin /signup /logout
 app.use('/', userRoutes);
 
 // Page principale

@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-// 🔐 Login
-router.get('/login', userController.getLoginPage);
-router.post('/login', userController.loginUser);
+// 🔐 signin
+router.get('/signin', userController.getsigninPage);
+router.post('/signin', userController.signinUser);
 
 // 🆕 Signup
 router.get('/signup', userController.getSignupPage);

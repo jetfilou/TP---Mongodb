@@ -16,9 +16,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 exports.uploadAvatar = upload.single('avatar');
 
-// 🧭 GET /login
-exports.getLoginPage = (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/login.html'));
+// 🧭 GET /signin
+exports.getsigninPage = (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/signin.html'));
 };
 
 // 🧭 GET /signup
@@ -53,25 +53,25 @@ exports.signupUser = async (req, res) => {
     });
 
     await newUser.save();
-    res.redirect('/login');
+    res.redirect('/signin');
   } catch (err) {
     console.error('Erreur signup :', err);
     res.status(500).send('Erreur serveur lors de la création du compte');
   }
 };
 
-// 🧩 POST /login
-exports.loginUser = async (req, res) => {
+// 🧩 POST /signin
+exports.signinUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.send('<p>Utilisateur introuvable</p><p><a href="/login">← Retour</a></p>');
+    return res.send('<p>Utilisateur introuvable</p><p><a href="/signin">← Retour</a></p>');
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.send('<p>Mot de passe incorrect</p><p><a href="/login">← Retour</a></p>');
+    return res.send('<p>Mot de passe incorrect</p><p><a href="/signin">← Retour</a></p>');
   }
 
   global.currentUserId = user.user_id;
@@ -81,5 +81,5 @@ exports.loginUser = async (req, res) => {
 // 🧭 GET /logout
 exports.logoutUser = (req, res) => {
   global.currentUserId = null;
-  res.redirect('/login');
+  res.redirect('/signin');
 };
