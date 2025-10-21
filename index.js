@@ -11,6 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 // Connexion MongoDB
 connectDB();
 
+app.use(express.static('public'));
+
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
