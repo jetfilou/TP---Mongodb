@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Accueil - Mon Twitter Clone</title>
+    <style>
+      body { font-family: Arial; background:#f0f2f5; margin:0; padding:0; }
+      header { background:#1da1f2; color:white; padding:15px; text-align:center; font-size:1.5em; }
+      .container { max-width:700px; margin:20px auto; }
+      .post, .answer { background:white; padding:15px; border-radius:10px; margin-bottom:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+      .answer { margin-left:30px; border-left:3px solid #1da1f2; }
+      .author { font-weight:bold; color:#1a1a1a; }
+      .date { font-size:0.8em; color:gray; }
+      textarea { width:100%; padding:10px; border-radius:5px; border:1px solid #ccc; margin:5px 0; resize:none; }
+      button { background:#1da1f2; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; }
+      button:hover { background:#0d8ddb; }
+      form { margin-top:10px; }
+      hr { border:none; border-top:1px solid #ccc; margin:20px 0; }
+      .logout { text-align:right; margin-bottom:10px; }
+      h2 { margin-bottom:10px; }
+    </style>
+  </head>
+  <body>
+    <header>Mon Twitter Clone</header>
+    <div class="container">
+      <div class="logout"><a href="/logout">Se déconnecter</a></div>
+
+      <h2 id="welcome">Bienvenue</h2>
+
+      <!-- Nouveau message -->
+      <div class="post">
+        <form method="POST" action="/createMessage" id="createMessageForm">
+          <input type="hidden" name="authorId" id="authorId" value="">
+          <textarea name="message" placeholder="Quoi de neuf ?" rows="3" required></textarea>
+          <button type="submit">Publier</button>
+        </form>
+      </div>
+
+      <hr>
+
+      <div id="postsContainer"></div>
+
+      <p><a href="/index">↻ Recharger</a></p>
+    </div>
+
+    <script>
+      // Charge les messages depuis l'API
+      async function loadMessages() {
+        const res = await fetch('/api/messages');
+        if (!res.ok) { document.getElementById('postsContainer').innerText = 'Erreur chargement messages'; return; }
+        const data = await res.json();
+        const container = document.getElementById('postsContainer');
+        container.innerHTML = '';
+
+        data.forEach(p => {
+          const post = document.createElement('div');
+          post.className = 'post';
+          post.innerHTML = `
+            <p class="author">${p.author}</p>
+            <p>${p.message}</p>
+            <p class="date">${new Date(p.creationDate).toLocaleString()}</p>
+          `;
+
+          if (p.answers && p.answers.length>0) {
+            p.answers.slice(0,100).forEach(a=>{
+              const ans = document.createElement('div');
+              ans.className = 'answer';
+              ans.innerHTML = `<p class="author">${a.author}</p><p>${a.message}</p><p class="date">${new Date(a.creationDate).toLocaleString()}</p>`;
+              post.appendChild(ans);
+            });
+          }
+
+          // Formulaire de réponse (simple)
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '/createAnswer';
+          form.innerHTML = `
+            <input type="hidden" name="messageId" value="${p.post_id}">
+            <input type="hidden" name="authorId" value=""> <!-- mettre l'id via serveur si besoin -->
+            <textarea name="answer" placeholder="Répondre..." rows="2" required></textarea>
+            <button type="submit">Répondre</button>
+          `;
+          post.appendChild(form);
+
+          container.appendChild(post);
+        });
+      }
+
+      loadMessages();
+    </script>
+  </body>
+</html>
