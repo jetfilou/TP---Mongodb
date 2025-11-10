@@ -1,70 +1,155 @@
-/* --- SIGNUP PAGE --- */
-.container {
-  width: 400px;
-  margin: 80px auto;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+body { 
+  font-family: Arial, sans-serif; 
+  background: #f0f2f5; 
+  margin: 0; 
+  padding: 0; 
 }
 
-h1 {
-  text-align: center;
-  color: #1da1f2;
-  margin-bottom: 25px;
+header { 
+  background: #1da1f2; 
+  color: white; 
+  padding: 15px; 
+  text-align: center; 
+  font-size: 1.5em; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.form-box {
-  display: flex;
-  flex-direction: column;
+.container { 
+  max-width: 600px; 
+  margin: 20px auto; 
+  padding: 0 15px;
 }
 
-.form-box input[type="text"],
-.form-box input[type="email"],
-.form-box input[type="password"],
-.form-box input[type="file"] {
-  margin-bottom: 15px;
-  padding: 10px;
+.post, .answer, .group { 
+  background: white; 
+  padding: 15px; 
+  border-radius: 10px; 
+  margin-bottom: 10px; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+}
+
+.answer { 
+  margin-left: 30px; 
+  border-left: 3px solid #1da1f2; 
+}
+
+.group {
+  border-left: 4px solid #1da1f2;
+}
+
+.group h3 {
+  margin-top: 0;
+  color: #1a1a1a;
+}
+
+.group a {
+  display: inline-block;
+  margin-top: 10px;
+  background: #1da1f2;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.group a:hover {
+  background: #0d8ddb;
+}
+
+.author { 
+  font-weight: bold; 
+  color: #1a1a1a; 
+  margin-bottom: 5px;
+}
+
+.date { 
+  font-size: 0.8em; 
+  color: gray; 
+  margin-top: 5px;
+}
+
+textarea { 
+  width: 100%; 
+  padding: 10px; 
+  border-radius: 5px; 
+  border: 1px solid #ccc; 
+  margin: 5px 0; 
+  resize: none; 
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"] {
+  width: 100%; 
+  padding: 10px; 
+  margin: 10px 0; 
+  border-radius: 5px; 
   border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
+  box-sizing: border-box;
 }
 
-.form-box button {
-  background-color: #1da1f2;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
+button { 
+  background: #1da1f2; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 15px;
   transition: background 0.3s;
 }
 
-.form-box button:hover {
-  background-color: #0d8ddb;
+button:hover { 
+  background: #0d8ddb; 
 }
 
-p {
-  text-align: center;
-  margin-top: 15px;
+form { 
+  margin-top: 10px; 
 }
 
+hr { 
+  border: none; 
+  border-top: 1px solid #ddd; 
+  margin: 20px 0; 
+}
 
-body { font-family: Arial; background:#f0f2f5; margin:0; padding:0; }
-header { background:#1da1f2; color:white; padding:15px; text-align:center; font-size:1.5em; }
-.container { max-width:600px; margin:20px auto; }
-.post, .answer { background:white; padding:15px; border-radius:10px; margin-bottom:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-.answer { margin-left:30px; border-left:3px solid #1da1f2; }
-.author { font-weight:bold; color:#1a1a1a; }
-.date { font-size:0.8em; color:gray; }
-textarea { width:100%; padding:10px; border-radius:5px; border:1px solid #ccc; margin:5px 0; resize:none; }
-button { background:#1da1f2; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; }
-button:hover { background:#0d8ddb; }
-form { margin-top:10px; }
-hr { border:none; border-top:1px solid #ccc; margin:20px 0; }
-.logout { text-align:right; margin-bottom:10px; }
-h2 { margin-bottom:10px; }
-input { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
-a { color:#1da1f2; text-decoration:none; }
-a:hover { text-decoration:underline; }
+.logout { 
+  text-align: right; 
+  margin-bottom: 15px; 
+}
+
+.logout a {
+  margin-left: 10px;
+}
+
+h2, h3 { 
+  margin-bottom: 15px; 
+  color: #1a1a1a;
+}
+
+a { 
+  color: #1da1f2; 
+  text-decoration: none; 
+}
+
+a:hover { 
+  text-decoration: underline; 
+}
+
+/* Signup/Signin specific */
+.auth-form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}

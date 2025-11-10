@@ -10,7 +10,11 @@ exports.createAnswer = async (req, res) => {
   if (!post) return res.send('Message introuvable');
   if (post.answers.length >= 100) return res.send('Nombre maximum de réponses atteint');
 
-  post.answers.push({ message: answer, author: `${user.firstname} ${user.lastname}` });
+  post.answers.push({ 
+    message: answer, 
+    author: `${user.firstname} ${user.lastname}` 
+  });
+  
   await post.save();
   res.redirect('/index');
 };

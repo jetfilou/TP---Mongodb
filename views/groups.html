@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Groupes</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>Mes Groupes</header>
+<div class="container">
+  <div class="logout">
+    <a href="/index">Accueil</a> | 
+    <a href="/profile">Profil</a> | 
+    <a href="/logout">Déconnexion</a>
+  </div>
+  
+  <h2>Bienvenue, {{firstname}}</h2>
+
+  <!-- Créer un groupe -->
+  <div class="post">
+    <h3>Créer un nouveau groupe</h3>
+    <form method="POST" action="/createGroup">
+      <input type="text" name="name" placeholder="Nom du groupe" required>
+      <input type="text" name="users" placeholder="IDs des utilisateurs (séparés par des virgules)">
+      <button type="submit">Créer le groupe</button>
+    </form>
+  </div>
+  
+  <hr>
+  
+  <h3>Liste des groupes</h3>
+  {{groups}}
+</div>
+</body>
+</html>

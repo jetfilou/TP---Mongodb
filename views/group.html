@@ -2,35 +2,34 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Accueil</title>
+<title>{{groupName}}</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<header>Mon Twitter Clone</header>
+<header>Groupe: {{groupName}}</header>
 <div class="container">
   <div class="logout">
-    <a href="/profile">Profil</a> | 
-    <a href="/groups">Groupes</a> | 
-    <a href="/logout">Déconnexion</a>
+    <a href="/groups">← Retour aux groupes</a> | 
+    <a href="/index">Accueil</a>
   </div>
-  <h2>Bienvenue, {{firstname}} {{lastname}}</h2>
 
-  <!-- Nouveau message -->
+  <!-- Poster un message -->
   <div class="post">
-    <form method="POST" action="/createMessage" id="messageForm">
-      <input type="hidden" name="authorId" value="{{user_id}}">
+    <form method="POST" action="/group/{{groupId}}/message" id="groupMessageForm">
       <input type="hidden" name="imageData" id="imageData">
-      <textarea name="message" placeholder="Quoi de neuf ?" rows="3" required></textarea>
+      <textarea name="message" placeholder="Écrire dans le groupe..." rows="3" required></textarea>
       <input type="file" id="imageUpload" accept="image/*">
       <button type="submit">Publier</button>
     </form>
   </div>
+  
   <hr>
-  {{posts}}
+  
+  {{messages}}
 </div>
 
 <script>
-  const form = document.getElementById('messageForm');
+  const form = document.getElementById('groupMessageForm');
   const imageUpload = document.getElementById('imageUpload');
   const imageData = document.getElementById('imageData');
 
@@ -39,7 +38,7 @@
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        imageData.value = event.target.result; // base64
+        imageData.value = event.target.result;
       };
       reader.readAsDataURL(file);
     }

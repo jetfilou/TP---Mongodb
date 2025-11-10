@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const multer = require('multer');
 
-// ⚙️ Configuration Multer pour upload avatar
+// Configuration Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../public/img'));
@@ -16,33 +16,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 exports.uploadAvatar = upload.single('avatar');
 
-// 🧭 GET /signin
+// GET /signin
 exports.getsigninPage = (req, res) => {
   res.sendFile(path.join(__dirname, '../views/signin.html'));
 };
 
-// 🧭 GET /signup
+// GET /signup
 exports.getSignupPage = (req, res) => {
   res.sendFile(path.join(__dirname, '../views/signup.html'));
 };
 
-// 🧩 POST /signup
+// POST /signup
 exports.signupUser = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
     const avatar = req.file ? '/img/' + req.file.filename : '/img/default-avatar.png';
 
-    // Vérifie si l'email existe déjà
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.send('<p>Email déjà utilisé</p><p><a href="/signup">← Retour</a></p>');
     }
 
-    // Calcul du prochain ID utilisateur
     const lastUser = await User.findOne().sort({ user_id: -1 });
     const nextId = lastUser ? lastUser.user_id + 1 : 1;
 
-    // Création utilisateur
     const newUser = new User({
       user_id: nextId,
       firstname,
@@ -56,11 +53,11 @@ exports.signupUser = async (req, res) => {
     res.redirect('/signin');
   } catch (err) {
     console.error('Erreur signup :', err);
-    res.status(500).send('Erreur serveur lors de la création du compte');
+    res.status(500).send('Erreur serveur');
   }
 };
 
-// 🧩 POST /signin
+// POST /signin
 exports.signinUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -74,12 +71,15 @@ exports.signinUser = async (req, res) => {
     return res.send('<p>Mot de passe incorrect</p><p><a href="/signin">← Retour</a></p>');
   }
 
-  global.currentUserId = user.user_id;
+  // Utilisation de la session
+  req.session.userId = user.user_id;
   res.redirect('/index');
 };
 
-// 🧭 GET /logout
+// GET /logout
 exports.logoutUser = (req, res) => {
-  global.currentUserId = null;
-  res.redirect('/signin');
+  req.session.destroy((err) => {
+    if (err) console.error(err);
+    res.redirect('/signin');
+  });
 };

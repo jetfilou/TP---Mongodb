@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mon Profil</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>Mon Profil</header>
+<div class="container">
+  <div class="logout">
+    <a href="/index">← Retour à l'accueil</a> | 
+    <a href="/logout">Déconnexion</a>
+  </div>
+
+  <h2>Modifier mon profil</h2>
+  
+  <div class="post">
+    <img src="{{avatar}}" alt="Avatar" style="width:100px; height:100px; border-radius:50%; display:block; margin:10px auto;">
+    
+    <form method="POST" action="/profile" enctype="multipart/form-data">
+      <input type="text" name="firstname" value="{{firstname}}" placeholder="Prénom" required>
+      <input type="text" name="lastname" value="{{lastname}}" placeholder="Nom" required>
+      <input type="email" name="email" value="{{email}}" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Nouveau mot de passe (laisser vide pour ne pas changer)">
+      
+      <label for="avatar">Changer d'avatar :</label>
+      <input type="file" name="avatar" accept="image/*">
+      
+      <button type="submit">Enregistrer les modifications</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
