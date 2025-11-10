@@ -16,6 +16,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 exports.uploadAvatar = upload.single('avatar');
 
+// Fonction de validation d'email
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 // GET /signin
 exports.getsigninPage = (req, res) => {
   res.sendFile(path.join(__dirname, '../views/signin.html'));
@@ -30,6 +36,12 @@ exports.getSignupPage = (req, res) => {
 exports.signupUser = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
+    
+    // Validation email
+    if (!isValidEmail(email)) {
+      return res.send('<p>Format d\'email invalide (ex: user@example.com)</p><p><a href="/signup">← Retour</a></p>');
+    }
+    
     const avatar = req.file ? '/img/' + req.file.filename : '/img/default-avatar.png';
 
     const existingUser = await User.findOne({ email });
@@ -40,12 +52,13 @@ exports.signupUser = async (req, res) => {
     const lastUser = await User.findOne().sort({ user_id: -1 });
     const nextId = lastUser ? lastUser.user_id + 1 : 1;
 
+    // LE MOT DE PASSE SERA HACHÉ PAR LE PRE-SAVE HOOK
     const newUser = new User({
       user_id: nextId,
       firstname,
       lastname,
       email,
-      password,
+      password, // Pas de hachage manuel ici
       avatar
     });
 
@@ -60,6 +73,12 @@ exports.signupUser = async (req, res) => {
 // POST /signin
 exports.signinUser = async (req, res) => {
   const { email, password } = req.body;
+  
+  // Validation email
+  if (!isValidEmail(email)) {
+    return res.send('<p>Format d\'email invalide</p><p><a href="/signin">← Retour</a></p>');
+  }
+  
   const user = await User.findOne({ email });
 
   if (!user) {

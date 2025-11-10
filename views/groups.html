@@ -21,7 +21,10 @@
     <h3>Créer un nouveau groupe</h3>
     <form method="POST" action="/createGroup">
       <input type="text" name="name" placeholder="Nom du groupe" required>
-      <input type="text" name="users" placeholder="IDs des utilisateurs (séparés par des virgules)">
+      <input type="text" name="userEmails" placeholder="Emails des utilisateurs (séparés par des virgules)">
+      <small style="color: gray; display: block; margin-top: 5px;">
+        Exemple : alice@example.com, bob@example.com
+      </small>
       <button type="submit">Créer le groupe</button>
     </form>
   </div>

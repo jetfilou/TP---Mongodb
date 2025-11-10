@@ -2,11 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>{{groupName}}</title>
+<title>Groupe</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<header>Groupe: {{groupName}}</header>
+<header>Groupe {{groupName}}</header>
 <div class="container">
   <div class="logout">
     <a href="/groups">← Retour aux groupes</a> | 
@@ -15,10 +15,8 @@
 
   <!-- Poster un message -->
   <div class="post">
-    <form method="POST" action="/group/{{groupId}}/message" id="groupMessageForm">
-      <input type="hidden" name="imageData" id="imageData">
+    <form method="POST" action="/group/{{groupId}}/message">
       <textarea name="message" placeholder="Écrire dans le groupe..." rows="3" required></textarea>
-      <input type="file" id="imageUpload" accept="image/*">
       <button type="submit">Publier</button>
     </form>
   </div>
@@ -27,22 +25,5 @@
   
   {{messages}}
 </div>
-
-<script>
-  const form = document.getElementById('groupMessageForm');
-  const imageUpload = document.getElementById('imageUpload');
-  const imageData = document.getElementById('imageData');
-
-  imageUpload.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        imageData.value = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-</script>
 </body>
 </html>

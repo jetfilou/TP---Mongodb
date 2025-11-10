@@ -13,7 +13,13 @@
     <form action="/signup" method="POST" enctype="multipart/form-data">
       <input type="text" name="firstname" placeholder="Prénom" required>
       <input type="text" name="lastname" placeholder="Nom" required>
-      <input type="email" name="email" placeholder="Email" required>
+      <input 
+        type="email" 
+        name="email" 
+        placeholder="Email" 
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        title="Format valide : utilisateur@exemple.com"
+        required>
       <input type="password" name="password" placeholder="Mot de passe" required>
       <label for="avatar">Avatar :</label>
       <input type="file" name="avatar" accept="image/*">

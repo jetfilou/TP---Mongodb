@@ -44,10 +44,12 @@ exports.updateProfile = async (req, res) => {
   if (lastname) user.lastname = lastname;
   if (email) user.email = email;
   
-  // Changement de mot de passe si fourni
+  // CORRECTION : Changement de mot de passe manuel (éviter le double hachage)
   if (password && password.trim() !== '') {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
+    // Empêcher le pre-save hook de re-hasher
+    user.markModified('password');
   }
   
   // Changement d'avatar si uploadé
@@ -55,6 +57,17 @@ exports.updateProfile = async (req, res) => {
     user.avatar = '/img/' + req.file.filename;
   }
   
-  await user.save();
+  // Sauvegarder sans déclencher le pre-save hook pour le password
+  await User.updateOne(
+    { user_id: req.session.userId },
+    {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      password: user.password,
+      avatar: user.avatar
+    }
+  );
+  
   res.redirect('/profile?success=1');
 };
