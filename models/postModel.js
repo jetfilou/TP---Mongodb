@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const answerSchema = new mongoose.Schema({
   message: String,
   author: String,
+  image: String, // Image en base64 pour les réponses
   creationDate: { type: Date, default: Date.now }
 });
 

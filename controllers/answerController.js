@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const Post = require('../models/postModel');
 
 exports.createAnswer = async (req, res) => {
-  const { authorId, messageId, answer } = req.body;
+  const { authorId, messageId, answer, imageData } = req.body;
   const user = await User.findOne({ user_id: authorId });
   if (!user) return res.send('Auteur introuvable');
 
@@ -12,7 +12,8 @@ exports.createAnswer = async (req, res) => {
 
   post.answers.push({ 
     message: answer, 
-    author: `${user.firstname} ${user.lastname}` 
+    author: `${user.firstname} ${user.lastname}`,
+    image: imageData || null // Image en base64
   });
   
   await post.save();

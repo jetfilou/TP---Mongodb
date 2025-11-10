@@ -30,6 +30,7 @@
 </div>
 
 <script>
+  // Gestion de l'upload d'image pour le message principal
   const form = document.getElementById('messageForm');
   const imageUpload = document.getElementById('imageUpload');
   const imageData = document.getElementById('imageData');
@@ -42,6 +43,25 @@
         imageData.value = event.target.result; // base64
       };
       reader.readAsDataURL(file);
+    }
+  });
+
+  // Gestion de l'upload d'images pour les réponses
+  document.querySelectorAll('.answer-form').forEach(form => {
+    const imageUpload = form.querySelector('.answer-image-upload');
+    const imageData = form.querySelector('.answer-image-data');
+    
+    if (imageUpload && imageData) {
+      imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            imageData.value = event.target.result; // base64
+          };
+          reader.readAsDataURL(file);
+        }
+      });
     }
   });
 </script>

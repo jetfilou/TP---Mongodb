@@ -16,27 +16,35 @@ exports.getIndexPage = async (req, res) => {
       <p class="author">${p.author}</p>
       <p>${p.message}</p>`;
     
-    // Affichage image si présente
+    // Affichage image du post si présente
     if (p.image) {
       postsHtml += `<img src="${p.image}" alt="Image" style="max-width:100%; border-radius:10px; margin:10px 0;">`;
     }
     
     postsHtml += `<p class="date">${p.creationDate.toLocaleString()}</p>`;
     
-    // Réponses
+    // Réponses avec images
     p.answers.forEach(a => {
       postsHtml += `<div class="answer">
         <p class="author">${a.author}</p>
-        <p>${a.message}</p>
-        <p class="date">${new Date(a.creationDate).toLocaleString()}</p>
+        <p>${a.message}</p>`;
+      
+      // Affichage image de la réponse si présente
+      if (a.image) {
+        postsHtml += `<img src="${a.image}" alt="Image" style="max-width:100%; border-radius:10px; margin:10px 0;">`;
+      }
+      
+      postsHtml += `<p class="date">${new Date(a.creationDate).toLocaleString()}</p>
       </div>`;
     });
 
-    // Formulaire réponse
-    postsHtml += `<form method="POST" action="/createAnswer">
+    // Formulaire réponse avec upload d'image
+    postsHtml += `<form method="POST" action="/createAnswer" class="answer-form" data-post-id="${p.post_id}">
       <input type="hidden" name="messageId" value="${p.post_id}">
       <input type="hidden" name="authorId" value="${user.user_id}">
+      <input type="hidden" name="imageData" class="answer-image-data">
       <textarea name="answer" placeholder="Répondre..." rows="2" required></textarea>
+      <input type="file" class="answer-image-upload" accept="image/*">
       <button type="submit">Répondre</button>
     </form></div>`;
   });
