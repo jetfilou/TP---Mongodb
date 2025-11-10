@@ -28,18 +28,29 @@ exports.listGroups = async (req, res) => {
   res.send(html);
 };
 
-// POST /createGroup
+// POST /createGroup - MODIFIÉ POUR UTILISER DES EMAILS
 exports.createGroup = async (req, res) => {
-  const { name, users } = req.body;
+  const { name, userEmails } = req.body;
   
   const count = await Group.countDocuments();
-  const userIds = users ? users.split(',').map(id => parseInt(id.trim())) : [];
-  userIds.push(req.session.userId); // Ajouter le créateur
+  let userIds = [req.session.userId]; // Ajouter le créateur
+  
+  // Convertir les emails en user_id
+  if (userEmails && userEmails.trim() !== '') {
+    const emails = userEmails.split(',').map(email => email.trim());
+    
+    for (const email of emails) {
+      const user = await User.findOne({ email });
+      if (user && !userIds.includes(user.user_id)) {
+        userIds.push(user.user_id);
+      }
+    }
+  }
   
   const newGroup = new Group({
     group_id: count + 1,
     name,
-    users: [...new Set(userIds)], // Éviter les doublons
+    users: userIds,
     createdBy: req.session.userId
   });
   
@@ -74,9 +85,7 @@ exports.viewGroup = async (req, res) => {
         <p class="author">${author ? author.firstname + ' ' + author.lastname : 'Inconnu'}</p>
         <p>${msg.message}</p>`;
       
-      if (msg.image) {
-        messagesHtml += `<img src="${msg.image}" alt="Image" style="max-width:100%; border-radius:10px; margin:10px 0;">`;
-      }
+      // SUPPRESSION DE L'AFFICHAGE DES IMAGES
       
       messagesHtml += `<p class="date">${msg.createdAt.toLocaleString()}</p>`;
       
@@ -94,7 +103,8 @@ exports.viewGroup = async (req, res) => {
     }
   }
   
-  html = html.replace('{{groupName}}', group.name)
+  // CORRECTION : Remplacement correct du nom du groupe
+  html = html.replace(/{{groupName}}/g, group.name)
              .replace('{{groupId}}', groupId)
              .replace('{{userId}}', req.session.userId)
              .replace('{{messages}}', messagesHtml);
@@ -102,10 +112,10 @@ exports.viewGroup = async (req, res) => {
   res.send(html);
 };
 
-// POST /group/:id/message
+// POST /group/:id/message - SUPPRESSION DES IMAGES
 exports.postGroupMessage = async (req, res) => {
   const groupId = parseInt(req.params.id);
-  const { message, imageData } = req.body;
+  const { message } = req.body; // SUPPRESSION de imageData
   
   const group = await Group.findOne({ group_id: groupId });
   if (!group || !group.users.includes(req.session.userId)) {
@@ -120,7 +130,7 @@ exports.postGroupMessage = async (req, res) => {
   groupPost.messages.push({
     user: req.session.userId,
     message,
-    image: imageData || null,
+    image: null, // Toujours null
     answers: []
   });
   
